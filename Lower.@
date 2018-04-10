@@ -1,0 +1,21 @@
+?? Written in Attache
+
+decode := [str] -> {
+    str .= Replace[str, /"[^₀-₉₊ₐₑₒᵢₓₔ₋₌₍₎]", ""]
+    inner .= ReplaceMultiple[
+        Translate[str, "₀-₉₊ₐₑₒₓ₋", "0-9+aeox-"],
+        "₌" -> ":=",
+        "₍" -> "While[a/=0,{",
+        "₎" -> "}[]]",
+        "ₔx" -> " Stdout<|Char<|",
+        "ₔ" -> " Stdout<|",
+        "ᵢ" -> " ReadInt[]"
+    ]
+    inner
+}
+
+LOWER := Eval@decode
+
+prog := FileRead[Arg[0]]
+
+LOWER[prog]
